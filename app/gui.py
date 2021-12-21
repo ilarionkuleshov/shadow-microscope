@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
 		self.resize(640, 480)
 
 		tab_widget = QTabWidget()
-		tab_widget.addTab(StreamTab('http://192.168.0.104'), 'Live video')
+		tab_widget.addTab(StreamTab('http://192.168.0.107'), 'Live video')
 
 		self.setCentralWidget(tab_widget)
 
