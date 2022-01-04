@@ -4,9 +4,9 @@ from urllib.request import urlretrieve
 
 import cv2
 
-from PySide6.QtWidgets import QMainWindow, QWidget, QTabWidget, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QFileDialog
+from PySide6.QtWidgets import QMainWindow, QWidget, QTabWidget, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QFileDialog, QToolTip
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import QUrl, QPoint
 from PySide6.QtGui import QFont, QPixmap
 
 from detection import ObjectDetector
@@ -100,12 +100,11 @@ class ProcessingTab(QWidget):
 		h_widget = QWidget()
 		h_widget.setLayout(h_layout)
 
-		self.image_label = QLabel()
-		self.update_image('extra-files/blank.png')
+		self.image_widget = ImageWithInfo()
 
 		v_layout = QVBoxLayout()
 		v_layout.addWidget(h_widget)
-		v_layout.addWidget(self.image_label)
+		v_layout.addWidget(self.image_widget)
 
 		self.setLayout(v_layout)
 
@@ -115,14 +114,58 @@ class ProcessingTab(QWidget):
 
 	def detect_button_click(self):
 		image = cv2.imread(self.path_input.text())
+		contours = self.detector.get_contours(image)
 
-		for contour in self.detector.get_contours(image):
+		for contour in contours:
 			x_min, y_min, x_max, y_max = contour
 			image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 1)
+
 			cv2.imwrite('extra-files/temp.jpg', image)
 
-		self.update_image('extra-files/temp.jpg')
+		self.image_widget.update_image('extra-files/temp.jpg', contours)
 
-	def update_image(self, image_path):
+
+class ImageWithInfo(QWidget):
+
+	def __init__(self):
+		super(ImageWithInfo, self).__init__()
+
+		self.image_label = QLabel()
+
+		self.contours = []
+		QToolTip.setFont(BASIC_FONT)
+
+		self.update_image('extra-files/blank.png', [])
+
+		self.image_label.setMouseTracking(True)
+		self.image_label.mouseMoveEvent = self.mouse_event
+
+		self.current_mouse_pos = (None, None)
+
+		layout = QVBoxLayout()
+		layout.addWidget(self.image_label)
+
+		self.setLayout(layout)
+
+	def update_image(self, image_path, contours):
 		image_pixmap = QPixmap(image_path)
 		self.image_label.setPixmap(image_pixmap)
+
+		self.contours = contours
+
+	def mouse_event(self, event):
+		mouse_pos = event.pos()
+		mouse_x, mouse_y = mouse_pos.x(), mouse_pos.y()
+
+		for contour in self.contours:
+			x_min, y_min, x_max, y_max = contour
+
+			if (mouse_x >= x_min and mouse_x <= x_max) and (mouse_y >= y_min and mouse_y <= y_max):
+				self.current_mouse_pos = mouse_x, mouse_y
+
+				tooltip_point = -self.image_label.mapFromGlobal(self.image_label.pos())+mouse_pos+QPoint(10, 10)
+				tooltip_text = f"Coordinates:\nx1 = {x_min}; y1 = {y_min}\nx2 = {x_max}; y2 = {y_max}"
+				QToolTip.showText(tooltip_point, tooltip_text)
+
+		if mouse_x != self.current_mouse_pos[0] or mouse_y != self.current_mouse_pos[1]:
+			QToolTip.hideText()
