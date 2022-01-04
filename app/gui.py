@@ -7,9 +7,17 @@ import cv2
 from PySide6.QtWidgets import QMainWindow, QWidget, QTabWidget, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QFileDialog
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtCore import QUrl
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QFont, QPixmap
 
 from detection import ObjectDetector
+
+
+BASIC_FONT = QFont()
+BASIC_FONT.setPixelSize(13)
+
+BOLD_FONT = QFont()
+BOLD_FONT.setPixelSize(14)
+BOLD_FONT.setBold(True)
 
 
 class MainWindow(QMainWindow):
@@ -38,6 +46,7 @@ class StreamTab(QWidget):
 		self.web_view.load(QUrl(f"{url}/cam.mjpeg"))
 
 		save_frame_but = QPushButton('Save current frame')
+		save_frame_but.setFont(BOLD_FONT)
 		save_frame_but.clicked.connect(self.save_frame)
 
 		layout = QVBoxLayout()
@@ -73,11 +82,14 @@ class ProcessingTab(QWidget):
 		self.detector = ObjectDetector(tflite_model, threshold, image_res)
 
 		self.path_input = QLineEdit(placeholderText='Path to image...')
+		self.path_input.setFont(BASIC_FONT)
 
 		path_button = QPushButton('...')
+		path_button.setFont(BASIC_FONT)
 		path_button.clicked.connect(self.path_button_click)
 
 		detect_button = QPushButton('Start processing')
+		detect_button.setFont(BOLD_FONT)
 		detect_button.clicked.connect(self.detect_button_click)
 
 		h_layout = QHBoxLayout()
@@ -88,7 +100,7 @@ class ProcessingTab(QWidget):
 		h_widget = QWidget()
 		h_widget.setLayout(h_layout)
 
-		self.image_label = QLabel() 
+		self.image_label = QLabel()
 		self.update_image('extra-files/blank.png')
 
 		v_layout = QVBoxLayout()
