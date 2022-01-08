@@ -1,3 +1,5 @@
+from math import tan, pi
+
 import cv2
 import numpy as np
 
@@ -48,3 +50,12 @@ class ObjectDetector:
 				contours.append([x_min, y_min, x_max, y_max])
 
 		return contours
+
+
+def get_real_size(size_in_px, av_res_in_px, chief_ray_angle, L, R, n1, n2):
+	H = 2*L*tan((chief_ray_angle)*pi/180)*size_in_px/av_res_in_px
+
+	F = (n2*R)/(n1-n2)
+	h = (H*F)/(L-R-F)
+
+	return h

@@ -9,7 +9,7 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtCore import QUrl, QPoint
 from PySide6.QtGui import QPixmap
 
-from detection import ObjectDetector
+from detection import ObjectDetector, get_real_size
 
 
 class MainWindow(QMainWindow):
@@ -150,8 +150,11 @@ class ImageWithInfo(QWidget):
 			if (mouse_x >= x_min and mouse_x <= x_max) and (mouse_y >= y_min and mouse_y <= y_max):
 				self.current_mouse_pos = mouse_x, mouse_y
 
+				size_x = get_real_size(x_max-x_min, 700, 25, 0.3, 0.001, 1.333, 1)
+				size_y = get_real_size(y_max-y_min, 700, 25, 0.3, 0.001, 1.333, 1)
+
 				tooltip_point = -self.image_label.mapFromGlobal(self.image_label.pos())+mouse_pos+QPoint(10, 10)
-				tooltip_text = f"Coordinates:\nx1 = {x_min}; y1 = {y_min}\nx2 = {x_max}; y2 = {y_max}"
+				tooltip_text = f"Real size X = {round(size_x*1000, 2)} mm\nReal size Y = {round(size_y*1000, 2)} mm"
 				QToolTip.showText(tooltip_point, tooltip_text)
 
 		if mouse_x != self.current_mouse_pos[0] or mouse_y != self.current_mouse_pos[1]:
