@@ -108,9 +108,9 @@ class ProcessingTab(QWidget):
 			x_min, y_min, x_max, y_max = contour
 			image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 1)
 
-			cv2.imwrite('extra-files/temp.jpg', image)
+			cv2.imwrite('imgs/temp.jpg', image)
 
-		self.image_widget.update_image('extra-files/temp.jpg', contours)
+		self.image_widget.update_image('imgs/temp.jpg', contours)
 
 
 class ImageWithInfo(QWidget):
@@ -122,7 +122,7 @@ class ImageWithInfo(QWidget):
 
 		self.contours = []
 
-		self.update_image('extra-files/blank.png', [])
+		self.update_image('imgs/blank.png', [])
 
 		self.image_label.setMouseTracking(True)
 		self.image_label.mouseMoveEvent = self.mouse_event
