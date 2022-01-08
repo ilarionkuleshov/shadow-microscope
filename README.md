@@ -2,7 +2,7 @@
 
 Проект позволяет исследовать жидкость на наличие микроскопических механических частиц и рассчитать их реальные размеры.
 
-<p align="center" height="600px">
+<p align="center" height="350px">
 	<img src="./readme-imgs/photo1.png"/>
 </p>
 
@@ -15,7 +15,7 @@
 
 На схеме показано как работает увеличение микроскопа на основе лазера:
 
-<p align="center" height="600px">
+<p align="center" height="350px">
 	<img src="./readme-imgs/schema.png"/>
 </p>
 
@@ -23,7 +23,7 @@
 
 Я использовал обычную проточную воду. Получились подобные изображения:
 
-<p align="center" height="600px">
+<p align="center" height="350px">
 	<img src="./readme-imgs/photo2.png"/>
 </p>
 
@@ -35,6 +35,6 @@
 
 В первой вкладке программы отображается видеопоток с камеры. Во второй вкладке можно обработать изображение нейронной сетью и рассчитать реальные размеры микрообъектов:
 
-<p align="center" height="600px">
+<p align="center" height="350px">
 	<img src="./readme-imgs/screenshot.png"/>
 </p>
