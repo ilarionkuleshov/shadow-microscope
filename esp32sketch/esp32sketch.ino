@@ -1,8 +1,11 @@
+// Скетч для модуля ESP32-CAM
+
 #include <WebServer.h>
 #include <WiFi.h>
 #include <esp32cam.h>
 
 
+// Название WiFi сети и её пароль
 const char *WIFI_SSID = "example-ssid";
 const char *WIFI_PASS = "example-pass";
 
@@ -11,6 +14,7 @@ WebServer server(80);
 static auto cam_res = esp32cam::Resolution::find(800, 600);
 
 
+// Функция для захвата видеопотока mjpeg с камеры
 void handle_mjpeg(){
 	Serial.println("Stream begin");
 
@@ -26,6 +30,7 @@ void handle_mjpeg(){
 }
 
 
+// Функция для захвата кадра с камеры
 void handle_jpg(){
 	auto frame = esp32cam::capture();
 

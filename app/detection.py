@@ -1,3 +1,5 @@
+# Скрипт детектирования и рассчёта объектов
+
 from math import tan, pi
 
 import cv2
@@ -6,6 +8,7 @@ import numpy as np
 from tflite_runtime.interpreter import Interpreter
 
 
+# Класс для использования нейросети
 class ObjectDetector:
 
 	def __init__(self, tflite_model, threshold, image_res):
@@ -52,6 +55,7 @@ class ObjectDetector:
 		return contours
 
 
+# Функция вычисления реальных размеров микрообъектов
 def get_real_size(size_in_px, av_res_in_px, chief_ray_angle, L, R, n1, n2):
 	H = 2*L*tan((chief_ray_angle)*pi/180)*size_in_px/av_res_in_px
 

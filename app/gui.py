@@ -1,3 +1,5 @@
+# Скрипт основной логики графического интерфейса приложения
+
 import os
 import time
 from urllib.request import urlretrieve
@@ -12,6 +14,7 @@ from PySide6.QtGui import QPixmap
 from detection import ObjectDetector, get_real_size
 
 
+# Класс главного окна приложения
 class MainWindow(QMainWindow):
 
 	def __init__(self):
@@ -27,6 +30,7 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(tab_widget)
 
 
+# Вкладка с виджетом браузера (видеопоток с камеры)
 class StreamTab(QWidget):
 
 	def __init__(self, url):
@@ -65,6 +69,7 @@ class StreamTab(QWidget):
 		self.web_view.reload()
 
 
+# Вкладка обработки изображений нейростетью
 class ProcessingTab(QWidget):
 
 	def __init__(self, tflite_model, threshold, image_res):
@@ -113,6 +118,7 @@ class ProcessingTab(QWidget):
 		self.image_widget.update_image('imgs/temp.jpg', contours)
 
 
+# Изображение с информацией о микрообъектах
 class ImageWithInfo(QWidget):
 
 	def __init__(self):
